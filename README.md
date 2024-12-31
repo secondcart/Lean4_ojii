@@ -6,7 +6,7 @@
   
   - [Mathematics in Lean &#26085;&#26412;&#35486;&#35379; &mdash; Mathematics in Lean &#26085;&#26412;&#35486;&#35379; 0.1 documentation](https://lean-ja.github.io/mathematics_in_lean_source/index.html)
 
-- コマンドは, Lean in Exampleを参考にしています.
+- コマンドは, Lean by Exampleを参考にしています.
   
   - [はじめに - Lean by Example](https://lean-ja.github.io/lean-by-example/index.html)
 
