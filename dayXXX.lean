@@ -44,7 +44,7 @@ theorem omochi (x : ℝ) : ¬Irrational x ↔ ∃ r : ℚ, x = r :=by
     exact Field.ratCast_def r
 
 theorem hagoita (s : ℝ): (∃ r : ℚ, s = r) ↔
-(∃ a : ℤ, ∃ b : ℕ, b ≠ 0 ∧ (Int.natAbs a).Coprime b ∧ s = a / b) :=by
+(∃ a : ℤ, ∃ b : ℤ, b ≠ 0 ∧ (Int.natAbs a).Coprime (Int.natAbs b) ∧ s = a / b) :=by
   constructor
   . intro h
     rcases h with ⟨r, bb⟩
@@ -54,7 +54,8 @@ theorem hagoita (s : ℝ): (∃ r : ℚ, s = r) ↔
     have h2 : r = r.num / r.den :=by exact Eq.symm (Rat.num_div_den r)
     nth_rw 3[h2]
     constructor
-    . exact r.den_nz
+    . apply Int.ofNat_ne_zero.mpr
+      exact r.den_nz
     . constructor
       . rw[← h2]
         exact r.reduced
@@ -69,18 +70,7 @@ theorem ekiden (p : ℤ) : Even (p^2) → Even p :=by
   contrapose
   rw[Int.not_even_iff_odd]
   rw[Int.not_even_iff_odd]
-  unfold Odd
-  intro h
-  rcases h with ⟨ℓ, bbb⟩
-  use 2 * ℓ^2 + 2 * ℓ
-  rw[bbb]
-  ring
-
-theorem ekiden2 (p : ℕ) : Even (p^2) → Even p :=by
-  contrapose
-  rw[Nat.not_even_iff_odd]
-  rw[Nat.not_even_iff_odd]
-  unfold Odd
+  dsimp [Odd]
   intro h
   rcases h with ⟨ℓ, bbb⟩
   use 2 * ℓ^2 + 2 * ℓ
@@ -89,7 +79,7 @@ theorem ekiden2 (p : ℕ) : Even (p^2) → Even p :=by
 
 theorem hatsuhinode (p : ℤ) : Even p → ∃ z : ℕ, p ^ 2 = 4 * z :=by
   intro a
-  unfold Even at a
+  dsimp [Even] at a
   rcases a with ⟨r, bbb⟩
   use (Int.natAbs r)^2
   rw[bbb]
@@ -131,7 +121,7 @@ example : Irrational √2 :=by
     rw[← pow_two]
   have h4 : Even (p^2) :=by
     rw[← h3]
-    unfold Even
+    dsimp [Even]
     use q^2
     ring
   have h5 :Even p :=by
@@ -146,7 +136,6 @@ example : Irrational √2 :=by
       rw[ggg] at h3
       have h72 : (4 : ℤ)= 2 * 2 :=by exact rfl
       rw[h72] at h3
-      zify
       apply nengajo
       rw[← mul_assoc]
       exact h3
@@ -155,13 +144,12 @@ example : Irrational √2 :=by
     rw[← two_mul]
     exact h71
   have h8 : Even q :=by
-    apply ekiden2
-    exact h7
+    exact ekiden q h7
   have h9 : Even (Int.natAbs p) :=by exact Int.natAbs_even.mpr h5
-  have h10 : ¬Nat.Coprime (Int.natAbs p) q :=by
+  have h10 : ¬Nat.Coprime (Int.natAbs p) (Int.natAbs q) :=by
     apply kakizome
     exact h9
-    exact h8
+    exact Int.natAbs_even.mpr h8
   contradiction
 
 -- 学「なるほど, おじいちゃんすごいね! でも, 知らないコマンドがあったり,
