@@ -26,7 +26,7 @@ example (h : a * b = c * d) (h' : e = f) : a * (b * e) = c * (d * f) := by
 -- 学「`variable` で宣言したものはファイルの最後まで有効なの?」
 -- ワシ「その通り, 途中で変えたいときとかは, `section` で区切ればよい.」
 
--- LIE
+-- LBE
 -- `section`: スコープを区切る
 -- `end` で閉じる. `end` がないとファイルの終わりまで.
 section

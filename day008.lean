@@ -6,7 +6,6 @@ import Mathlib
 
 namespace day8
 
--- MIL
 variable {R : Type*} [Ring R]
 theorem neg_eq_of_add_eq_zero {a b : R} (h : a + b = 0) : -a = b := by
   sorry
@@ -30,7 +29,7 @@ theorem neg_zero : (-0 : R) = 0 := by
 --    `neg_eq_of_add_eq_zero` を使って, `-a = b` も真になる.」
 -- ワシ「その通り. そういうときに便利なのが, `apply`.」
 -- 学「つまり, goalが `Q` で, `P → Q` となる仮定や定理があれば, `apply` を使って,
---     goalが `P` になるということ?(LIE)」
+--     goalが `P` になるということ?(LBE)」
 -- ワシ「さす孫!」
 
 -- ワシ「ここまで環の足し算ばかりみたが, 引き算は, 加法の逆元との足し算と等しい.」

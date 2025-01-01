@@ -16,8 +16,9 @@ import Mathlib
 -- LBE: Lean by Example
 -- https://lean-ja.github.io/lean-by-example/index.html
 -- どちらもLean4では, 定番のドキュメントです.
+-- ただし, MILに沿って行うため, コードはほとんどMILです.
+-- なので, コードに関しては, MILの表記は省略します.
 
--- MIL
 -- 実数 `a`, `b`, `c` に対して, `a * b * c = b * (a * c)`.
 example (a b c : ℝ) : a * b * c = b * (a * c) := by
   rw [mul_comm a b]
@@ -68,7 +69,6 @@ example (a b c : ℝ) : a * b * c = b * (a * c) := by
 -- ワシ「項に応じて型を作れる. そのため, 表現の幅が広い.
 --      また, 項が型に依存しているといえるため, 依存型理論という. もう少し見よう.」
 
--- MIL
 -- `#check`: 型を調べる.
 -- 出力結果は, 右画面に出ますが, コメントとして書く.
 #check 1 -- 1 : ℕ

@@ -6,7 +6,6 @@ import Mathlib
 -- ワシ「(ずっとtacticの話をするのも飽きた.)」
 -- ワシ「環の公理は, Leanで以下のようにかける.」
 
--- MIL
 variable (R : Type*) [Ring R]
 
 #check (add_assoc : ∀ a b c : R, a + b + c = a + (b + c))

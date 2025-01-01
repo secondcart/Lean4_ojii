@@ -23,7 +23,7 @@ example (h : a ≤ b) : log (1 + exp a) ≤ log (1 + exp b) := by
 -- 僕「不等式だから, `linarith` はダメなの?」
 -- ワシ「さす孫! それでもできるけど, 実行に時間がかかる.」
 
--- LIE
+-- LBE
 -- `#time`: 実行時間計測
 #time example : 1 < 2 :=by linarith
 #time example : 1 < 2 :=by norm_num
@@ -73,7 +73,7 @@ example : min a b = min b a := by
 
 -- 学「goalが複数あるから, `.` で区切ると見やすいね. `show` は必要なの?」
 -- ワシ「無くてもいい. ただ, 証明が読みやすいし, 現在のgoalを確認できる.」
--- 学「本当だ! `show min a b ≥ min b a` にするとエラーになる. ただのコメントは違うね.」
+-- 学「本当だ! `show min a b ≥ min b a` にするとエラーになる. ただのコメントとは違うね.」
 
 -- (注) 見やすさのため, `.` を使っていますが, 実は以下でも問題なくできます.
 example : min a b = min b a := by
@@ -88,7 +88,7 @@ example : min a b = min b a := by
   apply min_le_left
 
 -- ワシ「今回のは, 同じことの繰り返しで少し長く感じたかもしれない.
---      そのときは, `repeat` が便利だ. これは指定したtacticを失敗するまで繰り返す(LIE).」
+--      そのときは, `repeat` が便利だ. これは指定したtacticを失敗するまで繰り返す(LBE).」
 
 example : min a b = min b a := by
   apply le_antisymm

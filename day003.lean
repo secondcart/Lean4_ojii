@@ -10,7 +10,6 @@ import Mathlib
 -- 学「証明方法が違うだけで, 証明できることには変わりない?」
 -- ワシ「もちろん!」
 
--- MIL
 -- 証明項を使う方法
 example : ∀ m n : Nat, Even n → Even (m * n) := fun m n ⟨k, (hk : n = k + k)⟩ ↦
   have hmn : m * n = m * k + m * k := by rw [hk, mul_add]
