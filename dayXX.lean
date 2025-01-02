@@ -1,22 +1,71 @@
 import Mathlib
 
--- 最終話「`√2` が無理数(後編その1)」
+-- 最終話「`√2` が無理数(前編その2)」
 
 -- ワシ「まず, 現時点でどこまで証明が進んだか, おさらいだ.」
 -- 1. `√2` が有理数と仮定する. (Clear)
 -- 2. このとき, 互いに素な自然数 `p`, `q` から `√2 = q / p` とかける. (Clear)
--- 3. 両辺二乗して, 分母を払うと, `2 p^2 = q^2`. (Clear)
--- 4. 左辺は `2` の倍数だから, `q^2` は `2` の倍数, つまり, `q` も `2` の倍数. (Clear)
+-- 3. 両辺二乗して, 分母を払うと, `2 p^2 = q^2`.
+-- 4. 左辺は `2` の倍数だから, `q^2` は `2` の倍数, つまり, `q` も `2` の倍数.
 -- 5. `q^2` は `4` の倍数だから, `p^2` が `2` の倍数,つまり, `p` も `2` の倍数.
 -- 6. `p`, `q` が互いに素に矛盾.
+
+-- 学「先が遠い.」
+-- ワシ「いや, 意外と鬼門は越えたぞ. 今まで示した定理も記載する.
+--      ただ, 長くなるので, 証明はカットした.」
 
 theorem step1 (x : ℝ) : ¬Irrational x ↔ ∃ r : ℚ, x = r :=by sorry
 
 theorem step2 (s : ℝ): (∃ r : ℚ, s = r) ↔
 (∃ a : ℤ, ∃ b : ℤ, b ≠ 0 ∧ (Int.natAbs a).Coprime (Int.natAbs b) ∧ s = a / b) :=by sorry
 
+example : Irrational √2 :=by
+  by_contra h
+  rw[step1, step2] at h
+  sorry
+
+-- 3. 両辺二乗して, 分母を払うと, `2 p^2 = q^2`.
+
+-- ワシ「まず, 仮定 `h` を分解する必要がある.」
+-- 学「その後は, また定理を別に作る?」
+-- ワシ「それもいいけど, ただの計算だから直接かこう.」
+
+example (a b : ℝ) : Irrational √2 :=by
+  by_contra h
+  rw[step1, step2] at h
+  rcases h with ⟨q,p,pn0,qcop, pq2⟩
+  have step3 : (2 : ℝ) * p^2 = q^2 :=by
+    rw[show 2 = √2 * √2 from by norm_num]
+    rw[pq2]
+    -- `field_simp`: 分母を払う
+    field_simp
+    rw[← pow_two, ← pow_two]
+  sorry
+
+-- 学「なるほど, `have` でいいね. でも, 2個わからないtacticがあるけど.」
+-- 学「`show ... from` は何? `show` はgoalを示すだけだよね.」
+-- ワシ「単体ではそうだけど, `show ... from` で使い捨ての補題を作る(LBE)ことができる.
+--      `have` でも補題は作れるけど, 今回みたいに一度だけだし,
+--      わざわざ名前をつける程の補題ではないときに使える.」
+-- 学「なるほど. `field_simp` は?」
+-- ワシ「`field_simp` は, 体で分母を払うときに使うtactic(LBE).
+--      ただ, 分母が `0` でないことがわからないと動作しない.
+--      今回は `pn0 : p ≠ 0` としたから, 動作できた.」
+
+-- 4. 左辺は `2` の倍数だから, `q^2` は `2` の倍数, つまり, `q` も `2` の倍数.
+
+-- ワシ「これは2つにわける. 前半が『左辺が `2` の倍数ならば, `q^2` は `2` の倍数』」
+--       後半は, 『`q^2` が `2` の倍数だから, `q` も `2` の倍数』」
+-- ワシ「後半は, 補助定理を使って, 前半は `have` で示す.」
+
 theorem step42 (z : ℤ): Even (z^2) → Even z :=by
-  sorry
+  contrapose
+  rw[Int.not_even_iff_odd, Int.not_even_iff_odd]
+  dsimp [Odd]
+  rintro ⟨r, oddq⟩
+  use 2 * r^2 + 2 *r
+  rw[oddq]
+  ring
 
 example (a b : ℝ) : Irrational √2 :=by
   by_contra h
@@ -36,53 +85,7 @@ example (a b : ℝ) : Irrational √2 :=by
     ring
   sorry
 
--- 5. `q^2` は `4` の倍数だから, `p^2` が `2` の倍数,つまり, `p` も `2` の倍数.
-
-example (a b : ℝ) : Irrational √2 :=by
-  by_contra h
-  rw[step1, step2] at h
-  rcases h with ⟨q,p,pn0,qcop, pq2⟩
-  have step3 : (2 : ℝ) * p^2 = q^2 :=by
-    rw[show 2 = √2 * √2 from by norm_num]
-    rw[pq2]
-    field_simp
-    rw[← pow_two, ← pow_two]
-  have step4 : Even q :=by
-    apply step42
-    dsimp [Even]
-    use p^2
-    rify
-    rw[← step3]
-    ring
-  have step5 : Even p :=by
-    have step52 : Even (p^2) :=by
-      dsimp [Even]
-      have step51 : ∃ z : ℤ, q^2 = 4 * z :=by
-        dsimp [Even] at step4
-        rcases step4 with ⟨r, qrr⟩
-        use r^2
-        rw[qrr]
-        ring
-      rcases step51 with ⟨r,q24r⟩
-      rify at q24r
-      rw[q24r, show (4 : ℝ) = 2 * 2 from by norm_num] at step3
-      use r
-      rify
-      rw[← mul_two, ← mul_right_inj_of_invertible 2]
-      nth_rw 3[mul_comm]
-      rw[← mul_assoc]
-      exact step3
-    apply step42
-    exact step52
-  sorry
-
--- ワシ「もう少し上手い書き方があるかもだが, とりあえずできた.」
--- 学「いよいよ最後だね.」
-
--- 6. `p`, `q` が互いに素に矛盾.
-
--- ワシ「これは明日.」
--- 学「明日最終回!」
+-- ワシ「`rify` は実数にキャストするtacticだ. これにてstep4まで完了した. 続きは次回だ.」
 
 
 theorem ekiden (p : ℤ) : Even (p^2) → Even p :=by
